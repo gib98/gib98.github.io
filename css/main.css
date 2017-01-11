@@ -1,0 +1,10 @@
+canvas {
+    border: 1px solid black;
+    height: 90%;
+    width: 90%;
+    margin: auto;
+}
+
+.image {
+    color: yellow
+}
