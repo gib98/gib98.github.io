@@ -7,54 +7,57 @@ window.planets = []
 G = 6.67408e-11
 METERS_TO_AU = 6.68459e-14
 POWER_OF_R = -2
-DEL_T = 10
+DEL_T = 5
     /* unit conversion:
     1 pixel = 10 million kilometers
-    1 milisecond = .1 years
+    1 milisecond = sonething years
     1 'mass unit' = 5.972e24 kg (mass of earth)
     */
 MASSC = EARTH
-TIMEC = 3.154e6
+TIMEC = 3.154e7
 DISTC = 10e10
+AUTOM = 1.496e+11
+ACCC = 6656.77641
 
-function planet(mass, centerX, centerY, direction, velocity, color) {
-    this.mass = mass;
-    this.x = centerX;
-    this.y = centerY;
-    this.direction = direction * (Math.PI / 180);
-    this.velocity = velocity
-    this.vx = (velocity * Math.cos(this.direction));
-    this.vy = (velocity * Math.sin(this.direction));
+function planet(dist, direction, velocity, color) {
+    this.x = dist * 100 * Math.cos((direction - 90) * (Math.PI / 180)) + 500;
+    this.y = dist * 100 * Math.sin((direction - 90) * (Math.PI / 180)) + 500;
+    this.direction = (direction) * (Math.PI / 180);
+    this.velocity = velocity * 30000
+    this.vx = (this.velocity * Math.cos(this.direction * (Math.PI / 180)));
+    this.vy = (this.velocity * Math.sin(this.direction * (Math.PI / 180)));
     this.ax = 0
     this.ay = 0
+    this.accel = 0
     window.planets.push(this)
     this.draw = function () {
-        dist = Math.sqrt(Math.pow(this.x - window.c.width / 2, 2) + Math.pow(this.y - window.c.height / 2, 2))
-        dist *= window.DISTC
-        this.adir = Math.atan((this.x - window.c.width / 2) / (this.y - window.c.height / 2))
-        force = (this.mass * window.MASSC) * (window.SUN) * window.G * Math.pow(dist, window.POWER_OF_R)
-        accel = force / (this.mass * window.MASSC)
-        this.ax = accel * Math.cos(this.adir)
-        this.ay = accel * Math.sin(this.adir)
-        this.ax /= window.DISTC
-        this.ax /= Math.pow(31536000, 2)
-        this.ax *= .01
-        this.ay /= window.DISTC
-        this.ay /= Math.pow(31536000, 2)
-        this.ay *= .01
-        this.x += .5 * this.ax * Math.pow(window.DEL_T / 1000, 2) + this.vx * (window.DEL_T / 1000)
-        this.y += .5 * this.ay * Math.pow(window.DEL_T / 1000, 2) + this.vy * (window.DEL_T / 1000)
+        dist = Math.sqrt(Math.pow(this.x - 500, 2) + Math.pow(this.y - 500, 2))
+        dist /= 100
+        dist *= window.AUTOM
+        this.adir = Math.atan((this.x - 500) / -(this.y - 500))
+        this.accel = (window.SUN) * window.G * Math.pow(dist, window.POWER_OF_R)
+        this.ax = this.accel * Math.cos(this.adir)
+        this.ay = this.accel * Math.sin(this.adir)
+        this.dx = .5 * this.ax * Math.pow((window.DEL_T / 1000) * window.TIMEC, 2) + (this.vx * (window.DEL_T / 1000) * window.TIMEC)
+        this.dy = .5 * this.ay * Math.pow((window.DEL_T / 1000) * window.TIMEC, 2) + (this.vy * (window.DEL_T / 1000) * window.TIMEC)
+        this.dx /= window.AUTOM
+        this.dx *= 100
+        this.dy /= window.AUTOM
+        this.dy *= 100
+        this.x += this.dx
+        this.y += this.dy
         drawCircle(this.x, this.y, 5, color)
-        this.vx += (this.ax * window.DEL_T / 1000)
-        this.vy += (this.ay * window.DEL_T / 1000)
+        this.vx += (this.ax * (window.DEL_T / 1000) * window.TIMEC)
+        this.vy += (this.ay * (window.DEL_T / 1000) * window.TIMEC)
+        console.log([this.ax, this.ay])
     }
 }
 
 function setup() {
     console.log('setting up')
     window.c = document.getElementById('game');
-    c.height = window.innerHeight * .9
-    c.width = window.innerWidth * .9
+    c.height = 1000
+    c.width = 1000
     window.ctx = window.c.getContext('2d');
     drawSun()
 }
@@ -74,8 +77,8 @@ function drawCircle(centerX, centerY, radius, color = 'yellow') {
 }
 
 function render() {
-    c.height = window.innerHeight * .9
-    c.width = window.innerWidth * .9
+    c.height = 1000
+    c.width = 1000
     drawSun();
     for (i = 0; i < window.planets.length; i++) {
         window.planets[i].draw();
