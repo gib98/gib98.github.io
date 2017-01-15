@@ -24,17 +24,18 @@ function planet(dist, direction, velocity, color) {
     this.y = dist * 100 * Math.sin((direction - 90) * (Math.PI / 180)) + 500;
     this.direction = (direction) * (Math.PI / 180);
     this.velocity = velocity * 30000
-    this.vx = (this.velocity * Math.cos(this.direction * (Math.PI / 180)));
-    this.vy = (this.velocity * Math.sin(this.direction * (Math.PI / 180)));
+    this.vx = (this.velocity * Math.cos(this.direction));
+    this.vy = (this.velocity * Math.sin(this.direction));
     this.ax = 0
     this.ay = 0
     this.accel = 0
+    drawCircle(this.x, this.y, 5, color)
     window.planets.push(this)
     this.draw = function () {
-        dist = Math.sqrt(Math.pow(this.x - 500, 2) + Math.pow(this.y - 500, 2))
+        dist = Math.sqrt(Math.pow(this.x - 500, 2) + Math.pow(1000 - this.y - 500, 2))
         dist /= 100
         dist *= window.AUTOM
-        this.adir = Math.atan((this.x - 500) / -(this.y - 500))
+        this.adir = -Math.PI / 2 - Math.atan((this.x - 500) / (1000 - this.y - 500))
         this.accel = (window.SUN) * window.G * Math.pow(dist, window.POWER_OF_R)
         this.ax = this.accel * Math.cos(this.adir)
         this.ay = this.accel * Math.sin(this.adir)
@@ -95,6 +96,6 @@ function stop() {
 }
 
 function test() {
-    earth = new planet(1, 500, 500, 0, 0, 'blue')
-    init()
+    earth = new planet(1, 0, 1, 'blue')
+    mars = new planet(1, 45, 1, 'red')
 }
