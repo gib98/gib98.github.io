@@ -25,7 +25,7 @@ function planet(dist, direction, velocity, color) {
     this.direction = (direction) * (Math.PI / 180);
     this.velocity = velocity * 30000
     this.vx = (this.velocity * Math.cos(this.direction));
-    this.vy = (this.velocity * Math.sin(this.direction));
+    this.vy = -(this.velocity * Math.sin(this.direction));
     this.ax = 0
     this.ay = 0
     this.accel = 0
@@ -46,7 +46,7 @@ function planet(dist, direction, velocity, color) {
         this.dy /= window.AUTOM
         this.dy *= 100
         this.x += this.dx
-        this.y += this.dy
+        this.y -= this.dy
         drawCircle(this.x, this.y, 5, color)
         this.vx += (this.ax * (window.DEL_T / 1000) * window.TIMEC)
         this.vy += (this.ay * (window.DEL_T / 1000) * window.TIMEC)
