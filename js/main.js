@@ -7,19 +7,20 @@ window.planets = []
 G = 6.67408e-11
 METERS_TO_AU = 6.68459e-14
 POWER_OF_R = -2
-DEL_T = 2
+DEL_T = .005
     /* unit conversion:
     1 pixel = 10 million kilometers
     1 milisecond = sonething years
     1 'mass unit' = 5.972e24 kg (mass of earth)
     */
 MASSC = EARTH
-TIMEC = 3.154e7
+TIMEC = 3.154e7 * .75
 DISTC = 10e10
 AUTOM = 1.496e+11
 ACCC = 6656.77641
+SHOW_PATHS = false
 
-function planet(dist, direction, velocity, color = 'green') {
+function planet(dist = 1, direction = 0, velocity = 1, color = 'green') {
     this.x = 500 + dist * 100 * Math.cos((direction - 90) * (Math.PI / 180));
     this.y = 500 + dist * 100 * Math.sin((direction + 90) * (Math.PI / 180));
     this.direction = -(direction) * (Math.PI / 180);
@@ -29,11 +30,28 @@ function planet(dist, direction, velocity, color = 'green') {
     this.ax = 0
     this.ay = 0
     this.accel = 0
+    this.jerk = 0
+    this.jy = 0
+    this.jx = 0
     this.color = color
+    this.maxDist = NaN
+    this.minDist = NaN
     drawCircle(this.x, this.y, 5, this.color)
-    this.draw = function () {
+    this.calcPos = function () {
         dist = Math.sqrt(Math.pow(this.x - 500, 2) + Math.pow(this.y - 500, 2))
         dist /= 100
+        if (isNaN(this.maxDist)) {
+            this.maxDist = dist
+        }
+        else if (dist > this.maxDist) {
+            this.maxDist = dist
+        }
+        if (isNaN(this.minDist)) {
+            this.minDist = dist
+        }
+        else if (dist < this.maxDist) {
+            this.minDist = dist
+        }
         dist *= window.AUTOM
         this.adir = Math.atan2(500 - this.y, 500 - this.x)
         this.accel = (window.SUN) * window.G * Math.pow(dist, window.POWER_OF_R)
@@ -47,9 +65,11 @@ function planet(dist, direction, velocity, color = 'green') {
         this.dy *= 100
         this.x += this.dx
         this.y += this.dy
-        drawCircle(this.x, this.y, 5, this.color)
         this.vx += (this.ax * (window.DEL_T / 1000) * window.TIMEC)
         this.vy += (this.ay * (window.DEL_T / 1000) * window.TIMEC)
+    }
+    this.draw = function () {
+        drawCircle(this.x, this.y, 5, this.color)
     }
 }
 
@@ -77,20 +97,27 @@ function drawCircle(centerX, centerY, radius, color = 'green') {
 }
 
 function render() {
-    c.height = 1000
-    c.width = 1000
-    drawSun();
+    if (!window.SHOW_PATHS) {
+        c.height = 1000
+        c.width = 1000
+        drawSun();
+    }
     for (i = 0; i < window.planets.length; i++) {
+        for (k = 0; k < 2500; k++) {
+            window.planets[i].calcPos()
+        }
         window.planets[i].draw();
     }
 }
 
 function init() {
-    window.intervalID = window.setInterval(render, window.DEL_T);
+    window.intervalID = window.setInterval(render, 10);
+    document.getElementById("init").setAttribute("style", "visibility: hidden;")
 }
 
 function stop() {
     window.clearInterval(window.intervalID)
+    document.getElementById("init").setAttribute("style", "visibility: visible;")
 }
 
 function reset() {
