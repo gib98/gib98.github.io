@@ -1,0 +1,10 @@
+canvas {
+    border: 1px solid black;
+    float: left;
+}
+
+#inputs {
+    float: right;
+}
+
+span {}
