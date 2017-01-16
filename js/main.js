@@ -7,7 +7,7 @@ window.planets = []
 G = 6.67408e-11
 METERS_TO_AU = 6.68459e-14
 POWER_OF_R = -2
-DEL_T = .003
+DEL_T = .005
     /* unit conversion:
     1 pixel = 10 million kilometers
     1 milisecond = sonething years
@@ -103,7 +103,7 @@ function render() {
         drawSun();
     }
     for (i = 0; i < window.planets.length; i++) {
-        for (k = 0; k < 7500; k++) {
+        for (k = 0; k < 2500; k++) {
             window.planets[i].calcPos()
         }
         window.planets[i].draw();
