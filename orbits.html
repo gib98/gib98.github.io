@@ -13,31 +13,26 @@
 <body>
     <canvas id="game"></canvas>
     <div id="inputs">
-        <form>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="distance">
-                <label class="mdl-textfield__label" for="distance">Distance from sun (in AU)</label> <span class="mdl-textfield__error">Input is not a number!</span> </div>
-        </form>
-        <form>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="direction">
-                <label class="mdl-textfield__label" for="direction">Direction from sun (in degrees)</label> <span class="mdl-textfield__error">Input is not a number!</span> </div>
-        </form>
-        <form>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="speed">
-                <label class="mdl-textfield__label" for="speed">Speed (in 'earth speeds')</label> <span class="mdl-textfield__error">Input is not a number!</span> </div>
-        </form>
-        <form>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="color">
-                <label class="mdl-textfield__label" for="color">Color</label>
-            </div>
-        </form>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label in">
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="distance">
+            <label class="mdl-textfield__label" for="distance">Distance from sun (in AU)</label> <span class="mdl-textfield__error">Input is not a number!</span> </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label in">
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="direction">
+            <label class="mdl-textfield__label" for="direction">Direction from sun (in degrees)</label> <span class="mdl-textfield__error">Input is not a number!</span> </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label in">
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="speed">
+            <label class="mdl-textfield__label" for="speed">Speed (in 'earth speeds')</label> <span class="mdl-textfield__error">Input is not a number!</span> </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label in">
+            <input class="mdl-textfield__input" type="text" id="color">
+            <label class="mdl-textfield__label" for="color">Color</label>
+        </div>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="addPlanet()"> Create </button>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id=init onclick="init()"> Initialize </button>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="stop()"> Pause </button>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="reset()"> Reset </button>
+    </div>
+    <div id="settings">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="window.SHOW_PATHS = !window.SHOW_PATHS"> Toggle Paths </button>
     </div>
 </body>
 

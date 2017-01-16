@@ -5,6 +5,16 @@ canvas {
 
 #inputs {
     float: right;
+    padding: 10px;
+    width: 400 px;
 }
 
-span {}
+#settings {
+    padding: 10px;
+    float: right;
+    display: inline;
+}
+
+.in {
+    display: block;
+}

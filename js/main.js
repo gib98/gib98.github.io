@@ -123,7 +123,9 @@ function stop() {
 function reset() {
     stop()
     window.planets = []
-    render()
+    c.height = 1000
+    c.width = 1000
+    drawSun();
 }
 
 function test() {
