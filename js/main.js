@@ -50,7 +50,6 @@ function planet(dist, direction, velocity, color = 'green') {
         drawCircle(this.x, this.y, 5, this.color)
         this.vx += (this.ax * (window.DEL_T / 1000) * window.TIMEC)
         this.vy += (this.ay * (window.DEL_T / 1000) * window.TIMEC)
-        console.log([this.ax, this.ay])
     }
 }
 
