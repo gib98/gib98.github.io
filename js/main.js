@@ -7,7 +7,7 @@ window.planets = []
 G = 6.67408e-11
 METERS_TO_AU = 6.68459e-14
 POWER_OF_R = -2
-DEL_T = 5
+DEL_T = 2
     /* unit conversion:
     1 pixel = 10 million kilometers
     1 milisecond = sonething years
@@ -19,23 +19,23 @@ DISTC = 10e10
 AUTOM = 1.496e+11
 ACCC = 6656.77641
 
-function planet(dist, direction, velocity, color) {
-    this.x = dist * 100 * Math.cos((direction - 90) * (Math.PI / 180)) + 500;
-    this.y = dist * 100 * Math.sin((direction - 90) * (Math.PI / 180)) + 500;
-    this.direction = (direction) * (Math.PI / 180);
+function planet(dist, direction, velocity, color = 'green') {
+    this.x = 500 + dist * 100 * Math.cos((direction - 90) * (Math.PI / 180));
+    this.y = 500 + dist * 100 * Math.sin((direction + 90) * (Math.PI / 180));
+    this.direction = -(direction) * (Math.PI / 180);
     this.velocity = velocity * 30000
     this.vx = (this.velocity * Math.cos(this.direction));
-    this.vy = -(this.velocity * Math.sin(this.direction));
+    this.vy = (this.velocity * Math.sin(this.direction));
     this.ax = 0
     this.ay = 0
     this.accel = 0
-    drawCircle(this.x, this.y, 5, color)
-    window.planets.push(this)
+    this.color = color
+    drawCircle(this.x, this.y, 5, this.color)
     this.draw = function () {
-        dist = Math.sqrt(Math.pow(this.x - 500, 2) + Math.pow(1000 - this.y - 500, 2))
+        dist = Math.sqrt(Math.pow(this.x - 500, 2) + Math.pow(this.y - 500, 2))
         dist /= 100
         dist *= window.AUTOM
-        this.adir = -Math.PI / 2 - Math.atan((this.x - 500) / (1000 - this.y - 500))
+        this.adir = Math.atan2(500 - this.y, 500 - this.x)
         this.accel = (window.SUN) * window.G * Math.pow(dist, window.POWER_OF_R)
         this.ax = this.accel * Math.cos(this.adir)
         this.ay = this.accel * Math.sin(this.adir)
@@ -46,8 +46,8 @@ function planet(dist, direction, velocity, color) {
         this.dy /= window.AUTOM
         this.dy *= 100
         this.x += this.dx
-        this.y -= this.dy
-        drawCircle(this.x, this.y, 5, color)
+        this.y += this.dy
+        drawCircle(this.x, this.y, 5, this.color)
         this.vx += (this.ax * (window.DEL_T / 1000) * window.TIMEC)
         this.vy += (this.ay * (window.DEL_T / 1000) * window.TIMEC)
         console.log([this.ax, this.ay])
@@ -64,12 +64,12 @@ function setup() {
 }
 
 function drawSun() {
-    drawCircle(window.c.width / 2, window.c.height / 2, 20)
+    drawCircle(window.c.width / 2, window.c.height / 2, 20, 'yellow')
 }
 
-function drawCircle(centerX, centerY, radius, color = 'yellow') {
+function drawCircle(centerX, centerY, radius, color = 'green') {
     window.ctx.beginPath();
-    window.ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    window.ctx.arc(centerX, 1000 - centerY, radius, 0, 2 * Math.PI, false);
     window.ctx.fillStyle = color;
     window.ctx.fill();
     window.ctx.lineWidth = 5;
@@ -92,10 +92,23 @@ function init() {
 
 function stop() {
     window.clearInterval(window.intervalID)
+}
+
+function reset() {
+    stop()
     window.planets = []
+    render()
 }
 
 function test() {
     earth = new planet(1, 0, 1, 'blue')
     mars = new planet(1, 45, 1, 'red')
+}
+
+function addPlanet() {
+    window.colorField = document.getElementById("color")
+    window.directionField = document.getElementById("direction")
+    window.distanceField = document.getElementById("distance")
+    window.speedField = document.getElementById("speed")
+    window.planets.push(new planet(parseFloat(window.distanceField.value), parseFloat(window.directionField.value), parseFloat(window.speedField.value), window.colorField.value))
 }
